@@ -253,7 +253,7 @@ public extension String {
     var isNumeric: Bool {
         let scanner = Scanner(string: self)
         scanner.locale = NSLocale.current
-        #if os(Linux)
+        #if os(Linux) || targetEnvironment(macCatalyst)
         return scanner.scanDecimal() != nil && scanner.isAtEnd
         #else
         return scanner.scanDecimal(nil) && scanner.isAtEnd
@@ -1112,7 +1112,7 @@ public extension String {
     private typealias Font = UIFont
     #endif
 
-    #if canImport(Cocoa)
+    #if canImport(Cocoa) && !targetEnvironment(macCatalyst)
     private typealias Font = NSFont
     #endif
 
@@ -1154,7 +1154,7 @@ public extension String {
     }
     #endif
 
-    #if canImport(Cocoa)
+    #if canImport(Cocoa) && !targetEnvironment(macCatalyst)
     /// SwifterSwift: Add color to string.
     ///
     /// - Parameter color: text color.
