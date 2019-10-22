@@ -70,6 +70,22 @@ final class NSAttributedStringExtensionsTests: XCTestCase {
     }
 
     // MARK: - Methods
+    @available(iOS 13.0, *)
+    func testSFSymbols() {
+        #if canImport(UIKit)
+        let noSFSymbol = NSAttributedString(sfSymbol: "error")
+        XCTAssertNil(noSFSymbol)
+
+        guard let firstSymbol = NSAttributedString(sfSymbol: "0.circle"), let lastSymbol = NSAttributedString(sfSymbol: "zzz") else {
+                XCTFail("couldn't find SF Symbols")
+                return
+        }
+
+        let string = firstSymbol + "TEST" + lastSymbol
+        XCTAssertEqual(string.length, 6)
+        #endif
+    }
+
     func testColored() {
         #if canImport(UIKit)
         let string = NSAttributedString(string: "Colored")

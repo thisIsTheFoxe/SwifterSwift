@@ -177,4 +177,21 @@ public extension NSAttributedString {
 
 }
 
+// MARK: - Initializers
+public extension NSAttributedString {
+    #if canImport(UIKit)
+    /// SwifterSwift: Create an `NSAttributedString` that contains a SF Symbols image.
+    ///
+    /// - Parameters:
+    ///   - sfSymbol: the name of a SFSymbols image.
+    @available(iOS 13, *)
+    convenience init?(sfSymbol: String){
+        guard let image = UIImage(systemName: sfSymbol) else { return nil }
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = image
+        self.init(attachment: imageAttachment)
+    }
+    #endif
+}
+
 #endif
