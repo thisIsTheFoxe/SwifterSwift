@@ -53,7 +53,7 @@ final class UIImageExtensionsTests: XCTestCase {
         let originalSize = image.bytesSize
         let compressedImageData = image.compressedData(quality: 0.2)
         XCTAssertNotNil(compressedImageData)
-        XCTAssertLessThan(compressedImageData.count, originalSize)
+        XCTAssertLessThan(compressedImageData!.count, originalSize)
         XCTAssertNil(UIImage().compressedData())
     }
 
