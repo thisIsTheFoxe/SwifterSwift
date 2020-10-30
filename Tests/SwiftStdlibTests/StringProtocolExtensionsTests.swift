@@ -1,16 +1,9 @@
-//
-//  StringProtocolExtensionsTests.swift
-//  SwifterSwift
-//
-//  Created by Max Härtwig on 11/26/17.
-//  Copyright © 2017 SwifterSwift
-//
+// StringProtocolExtensionsTests.swift - Copyright 2020 SwifterSwift
 
-import XCTest
 @testable import SwifterSwift
+import XCTest
 
 final class StringProtocolExtensionsTests: XCTestCase {
-
     func testCommonSuffix() {
         let string1 = "Hello world!"
 
@@ -34,4 +27,18 @@ final class StringProtocolExtensionsTests: XCTestCase {
         XCTAssertEqual(string1.commonSuffix(with: "你好世界"), "")
     }
 
+    func testReplacingOccurrences() {
+        XCTAssertEqual("", "".replacingOccurrences(ofPattern: "empty", withTemplate: "case"))
+
+        let string = "hello"
+        XCTAssertEqual("hello", string.replacingOccurrences(ofPattern: "not", withTemplate: "found"))
+        XCTAssertEqual("hexo", string.replacingOccurrences(ofPattern: "l+", withTemplate: "x"))
+        XCTAssertEqual("hellxo", string.replacingOccurrences(ofPattern: "(ll)", withTemplate: "$1x"))
+
+        let options: String.CompareOptions = [.caseInsensitive]
+        XCTAssertEqual("hexo", string.replacingOccurrences(ofPattern: "L+", withTemplate: "x", options: options))
+
+        let range1 = string.startIndex..<string.index(string.startIndex, offsetBy: 3)
+        XCTAssertEqual("hexlo", string.replacingOccurrences(ofPattern: "l", withTemplate: "x", range: range1))
+    }
 }

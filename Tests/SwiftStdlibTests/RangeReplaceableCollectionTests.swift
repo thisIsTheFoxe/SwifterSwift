@@ -1,24 +1,16 @@
-//
-//  RangeReplaceableCollectionTests.swift
-//  SwifterSwift
-//
-//  Created by Luciano Almeida on 7/2/18.
-//  Copyright © 2018 SwifterSwift
-//
+// RangeReplaceableCollectionTests.swift - Copyright 2020 SwifterSwift
 
-import XCTest
 @testable import SwifterSwift
+import XCTest
 
 final class RangeReplaceableCollectionTests: XCTestCase {
-
     func testInitExpressionOfSize() {
         var array = [1, 2, 3]
         let newArray = [Int](expression: array.removeLast(), count: array.count)
         XCTAssertEqual(newArray, [3, 2, 1])
-        XCTAssertTrue(array.isEmpty)
+        XCTAssert(array.isEmpty)
         let empty = [Int](expression: 1, count: 0)
-        XCTAssertTrue(empty.isEmpty)
-
+        XCTAssert(empty.isEmpty)
     }
 
     func testRotated() {
@@ -31,7 +23,6 @@ final class RangeReplaceableCollectionTests: XCTestCase {
         XCTAssertEqual(array.rotated(by: -1), [2, 3, 4, 1])
         XCTAssertEqual(array.rotated(by: -3), [4, 1, 2, 3])
         XCTAssertEqual(array.rotated(by: -5), [2, 3, 4, 1])
-
     }
 
     func testRotate() {
@@ -71,36 +62,36 @@ final class RangeReplaceableCollectionTests: XCTestCase {
 
     func testKeepWhile() {
         var input = [2, 4, 6, 7, 8, 9, 10]
-        input.keep(while: {$0 % 2 == 0 })
+        input.keep(while: { $0 % 2 == 0 })
         XCTAssertEqual(input, [2, 4, 6])
 
         input = [7, 7, 8, 10]
-        input.keep(while: {$0 % 2 == 0 })
+        input.keep(while: { $0 % 2 == 0 })
         XCTAssertEqual(input, [Int]())
     }
 
     func testTakeWhile() {
         var input = [2, 4, 6, 7, 8, 9, 10]
-        var output = input.take(while: {$0 % 2 == 0 })
+        var output = input.take(while: { $0 % 2 == 0 })
         XCTAssertEqual(output, [2, 4, 6])
 
         input = [7, 7, 8, 10]
-        output = input.take(while: {$0 % 2 == 0 })
+        output = input.take(while: { $0 % 2 == 0 })
         XCTAssertEqual(output, [Int]())
 
-        XCTAssertEqual([].take(while: {$0 % 2 == 0 }), [])
+        XCTAssertEqual([].take(while: { $0 % 2 == 0 }), [])
     }
 
     func testSkipWhile() {
         var input = [2, 4, 6, 7, 8, 9, 10]
-        var output = input.skip(while: {$0 % 2 == 0 })
+        var output = input.skip(while: { $0 % 2 == 0 })
         XCTAssertEqual(output, [7, 8, 9, 10])
 
         input = [7, 7, 8, 10]
-        output = input.skip(while: {$0 % 2 == 0 })
+        output = input.skip(while: { $0 % 2 == 0 })
         XCTAssertEqual(output, [7, 7, 8, 10])
 
-        XCTAssertEqual([].skip(while: { $0 % 2 == 0}), [])
+        XCTAssertEqual([].skip(while: { $0 % 2 == 0 }), [])
     }
 
     func testRemoveDuplicatesUsingKeyPathHashable() {
@@ -136,5 +127,47 @@ final class RangeReplaceableCollectionTests: XCTestCase {
 
         input.removeDuplicates(keyPath: \.location)
         XCTAssertEqual(input, expectedResult)
+    }
+
+    func testIntSubscripts() {
+        var string = "Hello world!"
+        XCTAssertEqual(string[0], "H")
+        XCTAssertEqual(string[11], "!")
+
+        XCTAssertEqual(string[0..<5], "Hello")
+        XCTAssertEqual(string[6..<12], "world!")
+
+        XCTAssertEqual(string[0...4], "Hello")
+        XCTAssertEqual(string[6...11], "world!")
+
+        XCTAssertEqual(string[0...], "Hello world!")
+
+        XCTAssertEqual(string[...11], "Hello world!")
+
+        XCTAssertEqual(string[..<12], "Hello world!")
+
+        string[0] = "h"
+        XCTAssertEqual(string, "hello world!")
+        string[11] = "?"
+        XCTAssertEqual(string, "hello world?")
+
+        string[0..<5] = "Goodbye"
+        XCTAssertEqual(string, "Goodbye world?")
+        string[8..<14] = "planet!"
+        XCTAssertEqual(string, "Goodbye planet!")
+
+        string[0...6] = "Hello"
+        XCTAssertEqual(string, "Hello planet!")
+        string[6...12] = "world?"
+        XCTAssertEqual(string, "Hello world?")
+
+        string[5...] = "!"
+        XCTAssertEqual(string, "Hello!")
+
+        string[..<6] = "Hello Ferris"
+        XCTAssertEqual(string, "Hello Ferris")
+
+        string[...4] = "Save"
+        XCTAssertEqual(string, "Save Ferris")
     }
 }

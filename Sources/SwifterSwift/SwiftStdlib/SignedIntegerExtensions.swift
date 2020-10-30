@@ -1,3 +1,5 @@
+// SignedIntegerExtensions.swift - Copyright 2020 SwifterSwift
+
 //
 //  SignedIntegerExtensions.swift
 //  SwifterSwift
@@ -10,8 +12,8 @@ import Foundation
 #endif
 
 // MARK: - Properties
-public extension SignedInteger {
 
+public extension SignedInteger {
     /// SwifterSwift: Absolute value of integer number.
     var abs: Self {
         return Swift.abs(self)
@@ -51,17 +53,16 @@ public extension SignedInteger {
         let hours = self / 3600
         let mins = (self % 3600) / 60
 
-        if hours != 0 && mins == 0 {
+        if hours != 0, mins == 0 {
             return "\(hours)h"
         }
         return "\(hours)h \(mins)m"
     }
-
 }
 
 // MARK: - Methods
-public extension SignedInteger {
 
+public extension SignedInteger {
     /// SwifterSwift: Greatest common divisor of integer value and n.
     ///
     /// - Parameter number: integer value to find gcd with.
@@ -85,7 +86,7 @@ public extension SignedInteger {
     ///
     /// - Parameter locale: locale, default is .current.
     /// - Returns: string ordinal representation of number in specified locale language. E.g. input 92, output in "en": "92nd".
-    @available(iOS 9.0, macOS 10.11, *)
+    @available(macOS 10.11, *)
     func ordinalString(locale: Locale = .current) -> String? {
         let formatter = NumberFormatter()
         formatter.locale = locale
@@ -94,5 +95,4 @@ public extension SignedInteger {
         return formatter.string(from: number)
     }
     #endif
-
 }

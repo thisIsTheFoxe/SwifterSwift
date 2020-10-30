@@ -1,15 +1,8 @@
-//
-//  StringProtocolExtensions.swift
-//  SwifterSwift
-//
-//  Created by Max Härtwig on 11/26/17.
-//  Copyright © 2017 SwifterSwift
-//
+// StringProtocolExtensions.swift - Copyright 2020 SwifterSwift
 
 import Foundation
 
 public extension StringProtocol {
-
     /// SwifterSwift: The longest common suffix.
     ///
     ///        "Hello world!".commonSuffix(with: "It's cold!") = "ld!"
@@ -19,23 +12,36 @@ public extension StringProtocol {
     ///     - Parameter options: Options for the comparison.
     /// - Returns: The longest common suffix of the receiver and the given String
     func commonSuffix<T: StringProtocol>(with aString: T, options: String.CompareOptions = []) -> String {
-        guard !isEmpty && !aString.isEmpty else { return "" }
-
-        var idx = endIndex
-        var strIdx = aString.endIndex
-
-        repeat {
-            formIndex(before: &idx)
-            aString.formIndex(before: &strIdx)
-
-            guard String(self[idx]).compare(String(aString[strIdx]), options: options) == .orderedSame else {
-                formIndex(after: &idx)
-                break
-            }
-
-        } while idx > startIndex && strIdx > aString.startIndex
-
-        return String(self[idx...])
+        return String(zip(reversed(), aString.reversed())
+            .lazy
+            .prefix(while: { (lhs: Character, rhs: Character) in
+                String(lhs).compare(String(rhs), options: options) == .orderedSame
+            })
+            .map { (lhs: Character, _: Character) in lhs }
+            .reversed())
     }
 
+    #if canImport(Foundation)
+    /// SwifterSwift: Returns a new string in which all occurrences of a regex pattern in a specified range of the receiver are replaced by the template.
+    /// - Parameter ofPattern: Regex pattern to replace.
+    /// - Parameter template: The regex template to replace the pattern.
+    /// - Parameter options: Options to use when matching the regex. Only .regularExpression, .anchored .and caseInsensitive are supported.
+    /// - Parameter searchRange: The range in the receiver in which to search.
+    /// - Returns: A new string in which all occurrences of regex pattern in searchRange of the receiver are replaced by template.
+    func replacingOccurrences<Target, Replacement>(
+        ofPattern pattern: Target,
+        withTemplate template: Replacement,
+        options: String.CompareOptions = [.regularExpression],
+        range searchRange: Range<Self.Index>? = nil) -> String where Target: StringProtocol,
+        Replacement: StringProtocol {
+        assert(
+            options.isStrictSubset(of: [.regularExpression, .anchored, .caseInsensitive]),
+            "Invalid options for regular expression replacement")
+        return replacingOccurrences(
+            of: pattern,
+            with: template,
+            options: options.union(.regularExpression),
+            range: searchRange)
+    }
+    #endif
 }

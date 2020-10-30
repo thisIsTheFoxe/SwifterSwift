@@ -1,17 +1,16 @@
-//
-//  SCNShape.swift
-//  SwifterSwift
-//
-//  Created by Max Härtwig on 06.04.19.
-//  Copyright © 2019 SwifterSwift
-//
+// SCNShapeExtensions.swift - Copyright 2020 SwifterSwift
 
-#if canImport(SceneKit) && canImport(UIKit)
+#if canImport(SceneKit)
 import SceneKit
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 // MARK: - Methods
+
 public extension SCNShape {
+    #if canImport(UIKit)
 
     /// SwifterSwift: Creates a shape geometry with the specified path, extrusion depth, and material.
     ///
@@ -35,6 +34,7 @@ public extension SCNShape {
         materials = [SCNMaterial(color: color)]
     }
 
+    #endif
 }
 
 #endif

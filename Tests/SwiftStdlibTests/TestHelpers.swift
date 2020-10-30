@@ -1,15 +1,21 @@
-//
-//  TestHelpers.swift
-//  SwifterSwift
-//
-//  Created by Ilya Glushchuk on 22/10/2019.
-//  Copyright © 2019 SwifterSwift
-//
+// TestHelpers.swift - Copyright 2020 SwifterSwift
+
+enum Season: String {
+    case summer
+    case autumn
+    case winter
+    case spring
+}
 
 /**
  These structs used to test ArrayExtensions and RangeReplaceableCollection.
  Feel free to use it for your needs.
  */
+struct SimplePerson: Equatable {
+    let forename, surname: String
+    let age: Int
+}
+
 struct Person: Equatable {
     var name: String
     var age: Int?
@@ -33,6 +39,6 @@ struct TestStruct: ExpressibleByIntegerLiteral, Equatable {
     typealias IntegerLiteralType = Int
 
     init(integerLiteral value: Int) {
-        self.testField = value
+        testField = value
     }
 }

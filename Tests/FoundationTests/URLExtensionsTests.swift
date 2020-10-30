@@ -1,31 +1,15 @@
-//
-//  URLExtensionsTests.swift
-//  SwifterSwift
-//
-//  Created by Omar Albeik on 03/02/2017.
-//  Copyright © 2017 SwifterSwift
-//
+// URLExtensionsTests.swift - Copyright 2020 SwifterSwift
 
-import XCTest
 @testable import SwifterSwift
+import XCTest
 
 #if canImport(Foundation)
 import Foundation
 
 final class URLExtensionsTests: XCTestCase {
-
     var url = URL(string: "https://www.google.com")!
     let params = ["q": "swifter swift"]
     let queryUrl = URL(string: "https://www.google.com?q=swifter%20swift")!
-
-    func testAppendingQueryParameters() {
-        XCTAssertEqual(url.appendingQueryParameters(params), queryUrl)
-    }
-
-    func testAppendQueryParameters() {
-        url.appendQueryParameters(params)
-        XCTAssertEqual(url, queryUrl)
-    }
 
     func testQueryParameters() {
         let url = URL(string: "https://www.google.com?q=swifter%20swift&steve=jobs&empty")!
@@ -37,7 +21,32 @@ final class URLExtensionsTests: XCTestCase {
         XCTAssertEqual(parameters.count, 2)
         XCTAssertEqual(parameters["q"], "swifter swift")
         XCTAssertEqual(parameters["steve"], "jobs")
-        XCTAssertEqual(parameters["empty"], nil)
+        XCTAssertNil(parameters["empty"])
+    }
+
+    func testOptionalStringInitializer() {
+        XCTAssertNil(URL(string: nil, relativeTo: nil))
+        XCTAssertNil(URL(string: nil))
+
+        let baseURL = URL(string: "https://www.example.com")
+        XCTAssertNotNil(baseURL)
+        XCTAssertNil(URL(string: nil, relativeTo: baseURL))
+
+        let string = "/index.html"
+        let optionalString: String? = string
+        XCTAssertEqual(URL(string: optionalString, relativeTo: baseURL), URL(string: string, relativeTo: baseURL))
+        XCTAssertEqual(
+            URL(string: optionalString, relativeTo: baseURL)?.absoluteString,
+            "https://www.example.com/index.html")
+    }
+
+    func testAppendingQueryParameters() {
+        XCTAssertEqual(url.appendingQueryParameters(params), queryUrl)
+    }
+
+    func testAppendQueryParameters() {
+        url.appendQueryParameters(params)
+        XCTAssertEqual(url, queryUrl)
     }
 
     func testValueForQueryKey() {
@@ -48,8 +57,8 @@ final class URLExtensionsTests: XCTestCase {
         let otherResult = url.queryValue(for: "other")
 
         XCTAssertEqual(codeResult, "12345")
-        XCTAssertEqual(emtpyResult, nil)
-        XCTAssertEqual(otherResult, nil)
+        XCTAssertNil(emtpyResult)
+        XCTAssertNil(otherResult)
     }
 
     func testDeletingAllPathComponents() {
@@ -68,7 +77,8 @@ final class URLExtensionsTests: XCTestCase {
     func testThumbnail() {
         XCTAssertNil(url.thumbnail())
 
-        let videoUrl = Bundle(for: URLExtensionsTests.self).url(forResource: "big_buck_bunny_720p_1mb", withExtension: "mp4")!
+        let videoUrl = Bundle(for: URLExtensionsTests.self)
+            .url(forResource: "big_buck_bunny_720p_1mb", withExtension: "mp4")!
         XCTAssertNotNil(videoUrl.thumbnail())
         XCTAssertNotNil(videoUrl.thumbnail(fromTime: 1))
     }
@@ -92,7 +102,6 @@ final class URLExtensionsTests: XCTestCase {
             XCTAssertEqual(url.droppedScheme()?.absoluteString, expected, "input url: \(input)")
         }
     }
-
 }
 
 #endif

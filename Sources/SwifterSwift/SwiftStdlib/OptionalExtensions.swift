@@ -1,14 +1,8 @@
-//
-//  OptionalExtensions.swift
-//  SwifterSwift
-//
-//  Created by Omar Albeik on 3/3/17.
-//  Copyright © 2017 SwifterSwift
-//
+// OptionalExtensions.swift - Copyright 2020 SwifterSwift
 
 // MARK: - Methods
-public extension Optional {
 
+public extension Optional {
     /// SwifterSwift: Get self of default value (if self is nil).
     ///
     ///		let foo: String? = nil
@@ -90,12 +84,11 @@ public extension Optional {
             lhs = rhs()
         }
     }
-
 }
 
 // MARK: - Methods (Collection)
-public extension Optional where Wrapped: Collection {
 
+public extension Optional where Wrapped: Collection {
     /// SwifterSwift: Check if optional is nil or empty collection.
     var isNilOrEmpty: Bool {
         guard let collection = self else { return true }
@@ -108,9 +101,65 @@ public extension Optional where Wrapped: Collection {
         guard !collection.isEmpty else { return nil }
         return collection
     }
+}
 
+// MARK: - Methods (RawRepresentable, RawValue: Equatable)
+
+public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
+    // swiftlint:disable missing_swifterswift_prefix
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    @inlinable static func == (lhs: Optional, rhs: Wrapped.RawValue?) -> Bool {
+        return lhs?.rawValue == rhs
+    }
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    @inlinable static func == (lhs: Wrapped.RawValue?, rhs: Optional) -> Bool {
+        return lhs == rhs?.rawValue
+    }
+
+    /// Returns a Boolean value indicating whether two values are not equal.
+    ///
+    /// Inequality is the inverse of equality. For any values `a` and `b`,
+    /// `a != b` implies that `a == b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    @inlinable static func != (lhs: Optional, rhs: Wrapped.RawValue?) -> Bool {
+        return lhs?.rawValue != rhs
+    }
+
+    /// Returns a Boolean value indicating whether two values are not equal.
+    ///
+    /// Inequality is the inverse of equality. For any values `a` and `b`,
+    /// `a != b` implies that `a == b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    @inlinable static func != (lhs: Wrapped.RawValue?, rhs: Optional) -> Bool {
+        return lhs != rhs?.rawValue
+    }
+
+    // swiftlint:enable missing_swifterswift_prefix
 }
 
 // MARK: - Operators
-infix operator ??= : AssignmentPrecedence
-infix operator ?= : AssignmentPrecedence
+
+infix operator ??=: AssignmentPrecedence
+infix operator ?=: AssignmentPrecedence
